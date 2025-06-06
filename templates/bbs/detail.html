@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block title %}投稿詳細ページ{% endblock %}
+
+{% block content %}
+{% comment %} articleじゃなくてobjectでも使えるらしい {% endcomment %}
+    <h1>{{ article.id }}の投稿詳細ページ</h1>
+    <div class="card bg-light shadow-sm mt-3">
+        <div class="card-body">
+            <p>{{ article.author }}：{{ article.created_at }}</p>
+            {#} 更新後の日時が入る↓ {#}
+            <p>最終更新:{{object.update_at}}</p>
+            <p>{{ article.content }}</p>
+            {#} pkは今回は投稿の主キー（1，2，3のような数字だったね） {#}
+            <p><a href="{% url "bbs:update" object.pk%}">{% bootstrap_button button_type="submit" button_class="btn-success" content="編集" size="md" %}</a></p>
+            <p><a href="{% url "bbs:delete" object.pk%}">{% bootstrap_button button_type="submit" button_class="btn-danger" content="削除" size="md" %}</a></p>
+        </div>
+    </div>
+    <p><a href="{% url 'bbs:index' %}">{% bootstrap_button button_type="submit" button_class="btn-secondary" content="一覧ページに戻る" size="md"%}</a></p>
+{% endblock  %}

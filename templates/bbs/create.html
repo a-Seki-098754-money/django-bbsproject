@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block title%}{{object|yesno:'-投稿編集,-新規作成'}}{% endblock %}
+
+{% block content %}
+
+<h1>投稿の{{object|yesno:'編集,新規作成'}}</h1>
+
+<form action="" method="post">
+    {% csrf_token %}
+    {% bootstrap_form form%} {# すべての項目を表示 #}
+    {% bootstrap_button button_type="submit" content=object|yesno:'更新,作成' size="md"%}
+</form>
+<div class="mt-3">
+    <a href="{% url 'bbs:index'%}">{% bootstrap_button button_type="submit" button_class="btn-secondary" content="一覧ページへ戻る" size="md" %}</a>
+</div>
+{% endblock%}
+
+{% comment %} 
+
+{% csrf_token %}
+↑は本人になりすました不正なリクエストを送られたときの
+対策に使用されるテンプレートタグ CSRF対策としてCSRFトークンを使用する。
+フォームをレンダリングする際に、
+隠し入力フィールドでDjangoが生成した一意のトークンが自動的に埋め込まれる仕組み。
+
+{{ form.as_p }}フォームが自動生成されるインスタンス。便利だね。
+
+{{object|yesno:'文字列１,文字列２'}}:
+Djangoのテンプレートフィルターyesnoを使用。
+object値がTrueなら1つ目の文字列、Falseなら2つ目の文字列を表示するよ！
+今回の動き：
+【新規】
+object＝新規（新しいインスタンス）で
+データベースに保存されていないよ
+object=存在しない　でFalseになるので「新規」が表示。
+ボタンは作成になるよ
+【編集】
+object=既存のインスタンスで
+object=存在するなのでTrueになり「編集」が表示。
+ボタンも更新になるよ
+{% endcomment %}
